@@ -9,6 +9,10 @@ inputs:
     description: 'Check if deploying to production'
     required: true
     default: 'false'
+  TOKEN:
+    description: 'GitHub Token'
+    required: true
+    default: ${{secrets.GITHUB_TOKEN}}
 runs:
   using: 'node12'
   main: 'dist/index.js'
