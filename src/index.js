@@ -3,11 +3,14 @@ const github = require('@actions/github');
 
 const PR_LIST = JSON.parse(core.getInput('PR_LIST', {required: true}));
 const IS_PRODUCTION_DEPLOY = JSON.parse(core.getInput('IS_PRODUCTION_DEPLOY', {required: true}));
+const TOKEN = core.getInput('GITHUB_TOKEN')
 const DATE = new Date();
 // eslint-disable-next-line max-len
 const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
 
-const octokit = github.getOctokit(core.getInput('GITHUB_TOKEN'));
+console.log('TOKEN', TOKEN)
+
+const octokit = github.getOctokit(TOKEN);
 
 /**
  * Create comment on pull request

@@ -9,7 +9,7 @@ inputs:
     description: 'Check if deploying to production'
     required: true
     default: 'false'
-  TOKEN:
+  GITHUB_TOKEN:
     description: 'GitHub Token'
     required: true
     default: ${{secrets.GITHUB_TOKEN}}
