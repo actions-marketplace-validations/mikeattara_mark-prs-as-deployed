@@ -2,14 +2,17 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
-    const PR_LIST = JSON.parse(core.getInput('PR_LIST', {required: true}));
-    const IS_PRODUCTION_DEPLOY = JSON.parse(core.getInput('IS_PRODUCTION_DEPLOY', {required: true}));
-    const GITHUB_TOKEN = JSON.parse(core.getInput('GITHUB_TOKEN', {required: true}));
+    const prList = core.getInput('PR_LIST', {required: true});
+    const isProd = core.getInput('IS_PRODUCTION_DEPLOY', {required: true});
+    console.log(prList, isProd);
+    const token = core.getInput('GITHUB_TOKEN', {required: true});
+    const IS_PRODUCTION_DEPLOY = JSON.parse(isProd);
+    const PR_LIST = JSON.parse(prList);
     const DATE = new Date();
     // eslint-disable-next-line max-len
     const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
 
-    const octokit = github.getOctokit(GITHUB_TOKEN);
+    const octokit = github.getOctokit(token);
 
     PR_LIST.forEach(pr => {
         createComment(pr, MESSAGE, ocktokit);
