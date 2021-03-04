@@ -12,7 +12,6 @@ inputs:
   GITHUB_TOKEN:
     description: 'GitHub Token'
     required: true
-    default: ${{secrets.GITHUB_TOKEN}}
 runs:
   using: 'node12'
   main: 'dist/index.js'
