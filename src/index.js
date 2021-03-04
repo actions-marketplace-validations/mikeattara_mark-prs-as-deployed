@@ -7,7 +7,7 @@ const DATE = new Date();
 // eslint-disable-next-line max-len
 const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
 
-const octokit = github.getOctokit(github.token);
+const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
 /**
  * Create comment on pull request
