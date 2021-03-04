@@ -5813,30 +5813,39 @@ function wrappy (fn, cb) {
 const core = __nccwpck_require__(186);
 const github = __nccwpck_require__(438);
 
-const PR_LIST = JSON.parse(core.getInput('PR_LIST', {required: true}));
-const IS_PRODUCTION_DEPLOY = JSON.parse(core.getInput('IS_PRODUCTION_DEPLOY', {required: true}));
-const GITHUB_TOKEN = JSON.parse(core.getInput('GITHUB_TOKEN', {required: true}));
-const DATE = new Date();
-// eslint-disable-next-line max-len
-const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
+try {
+    const PR_LIST = JSON.parse(core.getInput('PR_LIST', {required: true}));
+    const IS_PRODUCTION_DEPLOY = JSON.parse(core.getInput('IS_PRODUCTION_DEPLOY', {required: true}));
+    const GITHUB_TOKEN = JSON.parse(core.getInput('GITHUB_TOKEN', {required: true}));
+    const DATE = new Date();
+    // eslint-disable-next-line max-len
+    const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
 
-console.log(`List: ${PR_LIST}, isProd: ${ISPRODUCTION_DEPLOY}, Token: ${GITHUB_TOKEN}`);
+    const octokit = github.getOctokit(GITHUB_TOKEN);
 
-const octokit = github.getOctokit(GITHUB_TOKEN);
+    PR_LIST.forEach(pr => {
+        createComment(pr, MESSAGE, ocktokit);
+    })
+} catch(error) {
+    console.log(`Error: ${error.message}`)
+    core.setFailed(error.message)
+}
 
 /**
  * Create comment on pull request
  *
  * @param {Number} number - The pull request number
+ * @param {String} messageBody - The comment message
+ * @param {Object} number - The ocktokit client
  * @returns {Promise}
  */
-async function createComment(number) {
+async function createComment(number, messageBody, octokitClient) {
     console.log(`Writing comment on #${number}`);
     try {
-        const response = await octokit.issues.createComment({
+        const response = await octokitClient.issues.createComment({
             ...github.context.repo,
             issue_number: number,
-            body: MESSAGE,
+            body: messageBody,
         });
         return response;
     } catch (error) {
@@ -5844,18 +5853,6 @@ async function createComment(number) {
         core.setFailed(error);
     }
 }
-
-/**
- * Action runner function
- *
- */
-function run() {
-    PR_LIST.forEach((pr) => {
-        createComment(pr);
-    });
-}
-
-run();
 
 module.exports = {createComment};
 
