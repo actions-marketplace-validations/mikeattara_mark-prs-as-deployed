@@ -15,7 +15,7 @@ try {
     const octokit = github.getOctokit(token);
 
     PR_LIST.forEach(pr => {
-        createComment(pr, MESSAGE, ocktokit);
+        createComment(pr, MESSAGE, octokit);
     })
 } catch(error) {
     console.log(`Error: ${error.message}`)
