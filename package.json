@@ -1,0 +1,24 @@
+{
+  "name": "mark-prs-as-deployed",
+  "version": "1.0.0",
+  "description": "A GitHub Action that marks a list of pull requests as deployed to production or staging",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeattara/mark-prs-as-deployed.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikeattara/mark-prs-as-deployed/issues"
+  },
+  "homepage": "https://github.com/mikeattara/mark-prs-as-deployed#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+name: 'Mark Pull Requests as Deployed'
+description: 'Mark pull requests as deployed on production or staging'
+inputs:
+  PR_LIST:
+    description: 'Array or pull request numbers'
+    required: true
+    default: '[]'
+  IS_PRODUCTION_DEPLOY:
+    description: 'Check if deploying to production'
+    required: true
+    default: 'false'
+runs:
+  using: 'node12'
+  main: 'index.js'
