@@ -4,7 +4,6 @@ inputs:
   PR_LIST:
     description: 'Array or pull request numbers'
     required: true
-    default: '[]'
   IS_PRODUCTION_DEPLOY:
     description: 'Check if deploying to production'
     required: true

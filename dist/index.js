@@ -5813,47 +5813,49 @@ function wrappy (fn, cb) {
 const core = __nccwpck_require__(186);
 const github = __nccwpck_require__(438);
 
-try {
-    const prList = core.getInput('PR_LIST', {required: true});
-    const isProd = core.getInput('IS_PRODUCTION_DEPLOY', {required: true});
-    const token = core.getInput('GITHUB_TOKEN', {required: true});
-    const IS_PRODUCTION_DEPLOY = JSON.parse(isProd);
-    const PR_LIST = JSON.parse(prList);
-    const DATE = new Date();
-    // eslint-disable-next-line max-len
-    const MESSAGE = `Deployed to ${IS_PRODUCTION_DEPLOY ? 'production' : 'staging'} on ${DATE.toDateString()} at ${DATE.toTimeString()}`;
-
-    const octokit = github.getOctokit(token);
-
-    PR_LIST.forEach(pr => {
-        createComment(pr, MESSAGE, octokit);
-    })
-} catch(error) {
-    console.log(`Error: ${error.message}`)
-    core.setFailed(error.message)
-}
-
 /**
  * Create comment on pull request
  *
- * @param {Number} number - The pull request number
+ * @param {Number} number - The pull request or issue number
  * @param {String} messageBody - The comment message
- * @param {Object} number - The ocktokit client
+ * @param {Object} octokitClient - The ocktokit client
  * @returns {Promise}
  */
 async function createComment(number, messageBody, octokitClient) {
-    console.log(`Writing comment on #${number}`);
-    try {
-        const response = await octokitClient.issues.createComment({
-            ...github.context.repo,
-            issue_number: number,
-            body: messageBody,
-        });
-        return response;
-    } catch (error) {
-        console.log(`Unable to write comment on #${number}`);
-        core.setFailed(error);
-    }
+  console.log(`Writing comment on #${number}`);
+  try {
+    const response = await octokitClient.issues.createComment({
+      ...github.context.repo,
+      issue_number: number,
+      body: messageBody,
+    });
+    return response;
+  } catch (error) {
+    console.log(`Unable to write comment on #${number}`);
+    core.setFailed(error);
+  }
+}
+
+try {
+  const prList = JSON.parse(core.getInput("PR_LIST", { required: true }));
+  const isProd = JSON.parse(
+    core.getInput("IS_PRODUCTION_DEPLOY", { required: true })
+  );
+  const token = core.getInput("GITHUB_TOKEN", { required: true });
+  const date = new Date();
+  // eslint-disable-next-line max-len
+  const message = `Deployed to ${
+    isProd ? "production" : "staging"
+  } on ${date.toDateString()} at ${date.toTimeString()}`;
+
+  const octokit = github.getOctokit(token);
+
+  prList.forEach((pr) => {
+    createComment(pr, message, octokit);
+  });
+} catch (error) {
+  console.log(`Error: ${error.message}`);
+  core.setFailed(error.message);
 }
 
 
